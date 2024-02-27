@@ -1,0 +1,79 @@
+// 1. List out all databases in Mongo Server
+show dbs;
+
+// 2. How to choose your database as current database
+use your_database_name;
+
+// 3. List out all collections in a database
+show collections;
+
+// 4. What will happen while using below command (assume mydb is not created yet)
+//    use mydb;
+// This command will switch to the "mydb" database if it exists, otherwise, it will create the "mydb" database and switch to it.
+
+// 5. Create a collection (employee_db) with specified fields
+db.createCollection("employee_db");
+
+// 6. Insert 5 records in each location and each domain together
+var locations = ["chennai", "hyderabad", "mumbai"];
+var domains = ["Java", "Python", "MERN", "MEAN"];
+var departments = ["admin", "accounts", "HR", "insurance", "banking"];
+
+locations.forEach(function(location) {
+    domains.forEach(function(domain) {
+        for (var i = 1; i <= 5; i++) {
+            db.employee_db.insert({
+                employeeid: i,
+                name: "Employee" + i,
+                gender: "male",
+                salary: Math.floor(Math.random() * (80000 - 2000 + 1)) + 2000,
+                location: location,
+                department: departments[Math.floor(Math.random() * departments.length)],
+                domain: domain,
+                skills: ["Angular", "react", "nodejs", "expressjs"]
+            });
+        }
+    });
+});
+
+// 7. Insert record with specified values
+db.employee_db.insert({
+    name: "Fransy",
+    gender: "female",
+    salary: 45000,
+    location: "chennai",
+    department: "admin",
+    domain: "",
+    skills: []
+});
+
+// 8. List out all employees works in hyderabad
+db.employee_db.find({ location: "hyderabad" });
+
+// 9. List out all employee information who got salary more than 50000
+db.employee_db.find({ salary: { $gt: 50000 } });
+
+// 10. List out all employee information without id
+db.employee_db.find({}, { employeeid: 0 });
+
+// 11. List all male employees
+db.employee_db.find({ gender: "male" });
+
+// 12. List all female employees
+db.employee_db.find({ gender: "female" });
+
+// 13. List all employees who have skill as react
+db.employee_db.find({ skills: "react" });
+
+// 14. Create a collection as product which has name, price, inventory : {qtyavailable, warehouse}
+db.createCollection("product");
+
+// 15. Insert record with different values
+db.product.insert([
+    { name: "Product1", price: 100, inventory: { qtyavailable: 10, warehouse: "A" } },
+    { name: "Product2", price: 200, inventory: { qtyavailable: 20, warehouse: "B" } },
+    { name: "Product3", price: 300, inventory: { qtyavailable: 30, warehouse: "C" } }
+]);
+
+// 16. List out all products which are sold out
+db.product.find({ "inventory.qtyavailable": 0 });
